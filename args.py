@@ -1,0 +1,67 @@
+def add_NMT_model_args(parser):
+    parser.add_argument("--cuda", default=False, action="store_true")
+    parser.add_argument("--random_seed", default=6700417, type=int)
+    parser.add_argument("--model_name", type=str)
+    parser.add_argument("--test", default=False, action="store_true")
+    parser.add_argument("--save_to", type=str, default="../saved_models/")
+    parser.add_argument("--load_from", type=str, default=None)
+    parser.add_argument("--translation_output", type=str)
+
+    parser.add_argument("--sup_train_src_path", type=str, default="../Datasets/iwslt-2014/train.de-en.de")
+    parser.add_argument("--sup_train_tgt_path", type=str, default="../Datasets/iwslt-2014/train.de-en.en")
+    parser.add_argument("--unsup_train_src_path", type=str,
+                        default="../Datasets/wmt-2016/training-parallel-nc-v11/news-commentary-v11.de-en.de")
+    parser.add_argument("--unsup_train_tgt_path", type=str,
+                        default="../Datasets/wmt-2016/training-parallel-nc-v11/news-commentary-v11.de-en.en")
+    parser.add_argument("--valid_src_path", type=str, default="../Datasets/iwslt-2014/dev.de-en.de")
+    parser.add_argument("--valid_tgt_path", type=str, default="../Datasets/iwslt-2014/dev.de-en.en")
+    parser.add_argument("--test_src_path", type=str, default="../Datasets/iwslt-2014/test.de-en.de")
+    parser.add_argument("--test_tgt_path", type=str, default="../Datasets/iwslt-2014/test.de-en.en")
+    parser.add_argument("--src_vocab_pkl_path", type=str, default="../Datasets/iwslt-2014/de.vocab")
+    parser.add_argument("--tgt_vocab_pkl_path", type=str, default="../Datasets/iwslt-2014/en.vocab")
+    parser.add_argument("--load_src_vocab_path", type=str, default=None, help="text file, one word per line")
+    parser.add_argument("--load_tgt_vocab_path", type=str, default=None)
+
+    parser.add_argument("--src_vocab_size", type=int, default=30000)
+    parser.add_argument("--tgt_vocab_size", type=int, default=30000)
+    parser.add_argument("--bpe", type=str, default=None, help="subword | spm")
+    parser.add_argument("--share_enc_dec_emb", action="store_true", default=False)
+
+    parser.add_argument("--use_multi_head_att", default=0, type=int)
+    parser.add_argument("--head_num", default=8, type=int)
+    parser.add_argument("--drop_att", default=0.0, type=float, help="used in multi-head attention")
+
+    parser.add_argument("--emb_dim", action="store", default=256, type=int)
+    parser.add_argument("--hidden_dim", action="store", default=256, type=int)
+    parser.add_argument("--latent_att_dim", action="store", default=256, type=int, help="for MLP attention middle dimension")
+    parser.add_argument("--dec_att_dim", action="store", default=256, type=int, help="for MLP attention middle dimension")
+    parser.add_argument("--enc_layers", action="store", default=1, type=int)
+    parser.add_argument("--dec_layers", action="store", default=1, type=int)
+    parser.add_argument("--z_dim", action="store", default=256, type=int)
+    parser.add_argument("--att_type", default="D", type=str, choices=["M", "D"])
+    parser.add_argument("--att_dim", default=-1, type=int)
+    parser.add_argument("--cov_att", default=False, action="store_true")
+    parser.add_argument("--half_enc_h_dim", default=0, type=int, help="the hidden dimension of encoder is half of the decoder")
+
+    parser.add_argument("--batch_size", action="store", type=int, default=32)
+    parser.add_argument("--init_lr", default=0.001, type=float, action="store")
+    parser.add_argument("--valid_freq", action="store", default=100, type=int)
+    parser.add_argument("--display_freq", action="store", default=100, type=int)
+    parser.add_argument("--beam_size", action="store", default=5, type=int)
+    parser.add_argument("--epoch", default=100, type=int)
+
+    parser.add_argument('--dec_input_dropout', action="store", type=float, default=0.0, help="decoder input dropout to avoid KL diminishing")
+    parser.add_argument("--normal_dropout", default=0.5, type=float)
+    parser.add_argument("--drop_emb", default=0.0, type=float)
+
+    parser.add_argument("--uniform_init", default=None, type=float, help="if specified, use uniform initialization for all parameters, 0.1")
+    parser.add_argument('--clip_grad', default=5., type=float, help='clip gradients')
+    parser.add_argument("--share_decoder_emb", default=False, action="store_true", help="share input embedding and softmax weight")
+
+    # remove after validation
+    parser.add_argument("--drop_h", default=1, type=int)
+    parser.add_argument("--input_feed", default="ctx", type=str, choices=["readout", "ctx"])
+    parser.add_argument("--pad_src_sent", default=False, action="store_true")
+    parser.add_argument("--init_dec", default="cell", choices=["respect", "cell"])
+    parser.add_argument("--sort_src", default=False, action="store_true")
+    parser.add_argument("--valid_metric", default="bleu", type=str, choices=["ppl", "bleu", "ppl+len_pnt"])
